@@ -1,0 +1,50 @@
+from pydantic import BaseModel, ConfigDict, EmailStr
+from typing import Optional
+from pydantic.types import conint
+
+class UserOut(BaseModel):
+    id: int
+    email: EmailStr
+    model_config = ConfigDict(from_attributes=True)
+
+class PostBase(BaseModel):
+    title: str
+    content: str
+    published: bool = True
+    
+
+class PostCreate(PostBase):
+    pass
+
+class Post(PostBase):
+    id: int
+    owner_id: int
+    owner : UserOut
+    model_config = ConfigDict(from_attributes=True)
+
+class PostVote(BaseModel):
+    Post: Post
+    votes: int
+    model_config = ConfigDict(from_attributes=True)
+
+class UserCreate(BaseModel):
+    email: EmailStr
+    password: str
+
+
+
+class UserLogin(BaseModel):
+    email: EmailStr
+    password: str
+
+class Token(BaseModel):
+    access_token: str
+    token_type: str
+
+class TokenData(BaseModel):
+    id: int
+
+class Vote(BaseModel):
+    post_id: int
+    dir: conint(le=1)
+
